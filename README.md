@@ -1,51 +1,54 @@
-# aio-cli-plugin-boilerplate
-Basic working repo structure for Adobe teams to use as a starting point for their own plugins, and available as a github template to the @adobe github org.
-
-## How to use this template
-
-- create a new repo from the github.com/adobe and select it in the templates
-- give it a unique name ( plugins are typically named aio-cli-plugin-xxxx )
-- enter a description
-- pick options
-- create repository
-- `git clone`, `npm i`
-- make some changes to names of things readme, ...
-- `git add .`
-- `git commit -m 'A new begining'`
-
-## How to use this repo, ( like a repo )
-
-- Click 'Clone or Download' and download a zip
-- extract it to a directory on your machine
-- if you cloned, delete the hidden `.git` folder
-- run `git init`
-- make some changes to names of things readme, ...
-- `git add .`
-- `git commit -m 'A new begining'`
-
-- Create the new empty repo here on github
-- grab the remote url 
-
-### back in your directory ...
-- `git remote add origin new-repo-url`
-- `git push origin master`
+# aio-cli-plugin-info
 
 ---
 
-`{PLUGINNAME}` commands for the Adobe I/O CLI
+Environment info commands for troubleshooting, and reporting issues
 
 <!-- toc -->
+* [aio-cli-plugin-info](#aio-cli-plugin-info)
+* [Commands](#commands)
 <!-- tocstop -->
-# Usage
-<!-- usage -->
-<!-- usagestop -->
+
 # Commands
 <!-- commands -->
+* [`./bin/run info`](#binrun-info)
+* [`./bin/run report`](#binrun-report)
+
+## `./bin/run info`
+
+Display dev environment version information
+
+```
+USAGE
+  $ ./bin/run info
+
+OPTIONS
+  -j, --json  output raw json
+
+EXAMPLE
+  $ aio info
+```
+
+## `./bin/run report`
+
+Report an issue with the CLI
+
+```
+USAGE
+  $ ./bin/run report
+
+OPTIONS
+  -b, --bug      report an issue
+  -f, --feature  request a feature
+
+EXAMPLE
+  $ aio report
+```
 <!-- commandsstop -->
 
 ## Contributing
 
-Contributions are welcomed! Read the [Contributing Guide](CONTRIBUTING.md) for more information.
+Contributions are welcomed! Read the [Contributing Guide](.github/CONTRIBUTING.md) for more information.
 
 ## Licensing
 
