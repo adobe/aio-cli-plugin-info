@@ -29,9 +29,11 @@ EXAMPLE
   $ aio info
 ```
 
+_See code: [src/commands/info.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.0/src/commands/info.js)_
+
 ## `./bin/run report`
 
-Report an issue with the CLI
+Report an issue with the CLI or submit a feature request
 
 ```
 USAGE
@@ -44,6 +46,8 @@ OPTIONS
 EXAMPLE
   $ aio report
 ```
+
+_See code: [src/commands/report.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.0/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing

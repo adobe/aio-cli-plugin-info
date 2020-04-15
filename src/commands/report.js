@@ -27,7 +27,8 @@ const issueTemplate = `### Expected Behaviour\n
 class ReportCommand extends Command {
   async run() {
     const { flags } = this.parse(ReportCommand)
-    const baseReportUrl = `https://github.com/${this.config.pjson.repository}/issues/new/`
+
+    const baseReportUrl = `${this.config.pjson.bugs.url}/new/`
     let url
     if (flags.feature) {
       url = `${baseReportUrl}?body=&title=new+feature+request&label=enhancement`
@@ -63,11 +64,7 @@ ReportCommand.flags = {
 
 }
 
-ReportCommand.description = 'Report an issue with the CLI or submit a feature request';
-
-ReportCommand.examples = [
-  '$ aio report'
-]
+ReportCommand.description = 'Report an issue with the CLI or submit a feature request'
 
 module.exports = ReportCommand
 

@@ -37,11 +37,7 @@ InfoCommand.flags = {
   })
 }
 
-InfoCommand.description = 'Display dev environment version information';
-
-InfoCommand.examples = [
-  '$ aio info'
-]
+InfoCommand.description = 'Display dev environment version information'
 
 module.exports = InfoCommand
 
