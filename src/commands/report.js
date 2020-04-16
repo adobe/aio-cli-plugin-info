@@ -27,6 +27,10 @@ const issueTemplate = `### Expected Behaviour\n
 class ReportCommand extends Command {
   async run() {
     const { flags } = this.parse(ReportCommand)
+    
+    if (!this.config.pjson.bugs || !this.config.pjson.bugs.url) {
+      return this.error('Bug reporting url not found.')
+    }
 
     const baseReportUrl = `${this.config.pjson.bugs.url}/new/`
     let url

@@ -13,15 +13,9 @@ governing permissions and limitations under the License.
 const Command = require('../../src/commands/report')
 const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
-const cli = require('cli-ux')
+const { cli } = require('cli-ux')
 
 jest.mock('envinfo')
-jest.mock('cli-ux')
-
-
-
-// beforeAll(() => stdout.start())
-// afterAll(() => stdout.stop())
 
 test('exports', async () => {
   expect(typeof Command).toEqual('function')
@@ -44,6 +38,8 @@ describe('instance methods', () => {
 
   beforeEach(() => {
     command = new Command([])
+    envinfo.run.mockResolvedValue('ok')
+    cli.open.mockResolvedValue('mkay')
   })
 
   describe('run', () => {
@@ -53,9 +49,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run for bug', () => {
       command.argv = []
-      command.config = { pjson: { name: 'ima-cli' } }
-      envinfo.run.mockResolvedValue('ok')
-      cli.open.mockResolvedValue('mkay')
+      command.config = { pjson: { bugs: { url: 'some-link' } } }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -73,14 +67,29 @@ describe('instance methods', () => {
 
     test('does not call envinfo.run for feature', () => {
       command.argv = ['-f']
-      command.config = { pjson: { name: 'ima-cli' } }
-      envinfo.run.mockResolvedValue('ok')
-      cli.open.mockResolvedValue('mkay')
+      command.config = { pjson: { bugs: { url: 'some-link' } } } 
       return command.run().then(() => {
         expect(envinfo.run).not.toHaveBeenCalled()
         expect(cli.open).toHaveBeenCalled()
         expect(stdout.output).toMatch('')
       })
     })
+
+    test('outputs error if cli package.json does not define a bugs.url', (done) => {
+      command.argv = []
+      command.config = { pjson: { bugs: { } } }
+      command.error = jest.fn(() => {throw new Error('Bang bang there goes your heart')})
+      return command.run()
+        .then(() => {
+          done.fail('it should not reach here')
+        }).catch(() => {
+          expect(envinfo.run).not.toHaveBeenCalled()
+          expect(stdout.output).toMatch('')
+          expect(command.error).toHaveBeenCalled()
+          expect(cli.open).not.toHaveBeenCalled()
+          done()
+        })
+    })
+
   })
 })  
