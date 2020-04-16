@@ -24,12 +24,9 @@ USAGE
 
 OPTIONS
   -j, --json  output raw json
-
-EXAMPLE
-  $ aio info
 ```
 
-_See code: [src/commands/info.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.0/src/commands/info.js)_
+_See code: [src/commands/info.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.1/src/commands/info.js)_
 
 ## `./bin/run report`
 
@@ -42,12 +39,9 @@ USAGE
 OPTIONS
   -b, --bug      report an issue
   -f, --feature  request a feature
-
-EXAMPLE
-  $ aio report
 ```
 
-_See code: [src/commands/report.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.0/src/commands/report.js)_
+_See code: [src/commands/report.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.1/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing

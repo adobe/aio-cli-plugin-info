@@ -1,6 +1,6 @@
 {
   "name": "@adobe/aio-cli-plugin-info",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": "purplecabbage/aio-cli-plugins-info",
   "homepage": "https://github.com/purplecabbage/aio-cli-plugins-info",
   "dependencies": {
