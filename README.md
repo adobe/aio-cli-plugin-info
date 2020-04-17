@@ -26,7 +26,7 @@ OPTIONS
   -j, --json  output raw json
 ```
 
-_See code: [src/commands/info.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.1/src/commands/info.js)_
+_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/v0.1.1/src/commands/info.js)_
 
 ## `./bin/run report`
 
@@ -41,7 +41,7 @@ OPTIONS
   -f, --feature  request a feature
 ```
 
-_See code: [src/commands/report.js](https://github.com/purplecabbage/aio-cli-plugins-info/blob/v0.1.1/src/commands/report.js)_
+_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/v0.1.1/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing
