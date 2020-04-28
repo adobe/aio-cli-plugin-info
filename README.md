@@ -16,7 +16,7 @@ governing permissions and limitations under the License.
 [![Build Status](https://travis-ci.com/adobe/aio-cli-plugin-info.svg?branch=master)](https://travis-ci.com/adobe/aio-cli-plugin-info)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-cli-plugin-info/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-cli-plugin-info/)
 [![Github Issues](https://img.shields.io/github/issues/adobe/aio-cli-plugin-info.svg)](https://github.com/adobe/aio-cli-plugin-info/issues)
-[![Github Pull Requests](https://img.shields.io/github/issues-pr/adobe/aio-cli-plugin-info.svg)](https://github.com/adobe/aio-cli-plugin-info/pulls)
+[![Github Pull Requests](https://img.shields.io/github/issues-pr/adobe/aio-cli-plugin-info.svg)](https://github.com/adobe/aio-cli-plugin-info/pulls) [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/aio-cli-plugin-info.svg)](https://greenkeeper.io/)
 
 # aio-cli-plugin-info
 
