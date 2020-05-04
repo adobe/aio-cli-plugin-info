@@ -29,7 +29,7 @@
     "jest": "^25.4.0",
     "jest-haste-map": "^26.0.0",
     "jest-junit": "^10.0.0",
-    "jest-resolve": "^25.4.0",
+    "jest-resolve": "^26.0.0",
     "stdout-stderr": "^0.1.9"
   },
   "engines": {
