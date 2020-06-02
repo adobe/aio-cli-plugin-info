@@ -26,14 +26,25 @@ const issueTemplate = `### Expected Behaviour\n
 // ///////////////
 
 class ReportCommand extends Command {
+  bugsUrl () {
+    // package.json spec: bugs property can be a string, or an object
+    const pjson = this.config.pjson
+    const bugs = pjson.bugs
+
+    if (bugs && typeof (bugs) === 'string') {
+      return bugs
+    } else if (bugs && typeof (bugs) === 'object' && bugs.url) {
+      return bugs.url
+    } else {
+      return this.error('Bug reporting url not found.')
+    }
+  }
+
   async run () {
     const { flags } = this.parse(ReportCommand)
 
-    if (!this.config.pjson.bugs || !this.config.pjson.bugs.url) {
-      return this.error('Bug reporting url not found.')
-    }
-
-    const baseReportUrl = `${this.config.pjson.bugs.url}/new/`
+    const bugsUrl = this.bugsUrl()
+    const baseReportUrl = `${bugsUrl}/new/`
     let url
     if (flags.feature) {
       url = `${baseReportUrl}?body=&title=new+feature+request&label=enhancement`

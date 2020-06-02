@@ -47,9 +47,27 @@ describe('instance methods', () => {
       expect(command.run).toBeInstanceOf(Function)
     })
 
-    test('calls envinfo.run for bug', () => {
+    test('calls envinfo.run for bugs (object)', () => {
       command.argv = []
       command.config = { pjson: { bugs: { url: 'some-link' } } }
+      return command.run()
+        .then(() => {
+          expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
+          }), expect.objectContaining({
+            console: false
+          }))
+          expect(stdout.output).toMatch('')
+          expect(cli.open).toHaveBeenCalled()
+        })
+    })
+
+    test('calls envinfo.run for bugs (string)', () => {
+      command.argv = []
+      command.config = { pjson: { bugs: 'some-link' } }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
