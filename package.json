@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "repository": "adobe/aio-cli-plugin-info",
   "homepage": "https://github.com/adobe/aio-cli-plugin-info",
+  "bugs": "https://github.com/adobe/aio-cli-plugin-info/issues",
   "dependencies": {
     "@adobe/aio-lib-core-config": "^1.2.8",
     "@oclif/command": "^1",
