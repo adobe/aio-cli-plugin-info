@@ -11,7 +11,8 @@
     "@oclif/errors": "^1.1.2",
     "cli-ux": "^5.4.6",
     "debug": "^4.1.0",
-    "envinfo": "^7.5.0"
+    "envinfo": "^7.5.0",
+    "snyk": "^1.334.0"
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^1.2.0",
@@ -62,7 +63,9 @@
     "prepack": "oclif-dev manifest && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif-dev readme && git add README.md",
-    "e2e": "jest --collectCoverage=false --testRegex './e2e/e2e.js'"
+    "e2e": "jest --collectCoverage=false --testRegex './e2e/e2e.js'",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "jest": {
     "collectCoverage": true,
@@ -80,5 +83,6 @@
     "setupFilesAfterEnv": [
       "./jest.setup.js"
     ]
-  }
+  },
+  "snyk": true
 }
