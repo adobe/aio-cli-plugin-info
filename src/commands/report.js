@@ -10,10 +10,11 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const {Command, flags} = require('@oclif/command')
+const { Command, flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 const envinfo = require('envinfo')
-///
+
+// ///////////////
 const issueTemplate = `### Expected Behaviour\n
 ### Actual Behaviour\n
 ### Reproduce Scenario (including but not limited to)\n
@@ -22,12 +23,12 @@ const issueTemplate = `### Expected Behaviour\n
 \`\`\`%replaced%\`\`\`
 #### Sample Code that illustrates the problem\n
 #### Logs taken while reproducing problem\n`
-///
+// ///////////////
 
 class ReportCommand extends Command {
-  async run() {
+  async run () {
     const { flags } = this.parse(ReportCommand)
-    
+
     if (!this.config.pjson.bugs || !this.config.pjson.bugs.url) {
       return this.error('Bug reporting url not found.')
     }
@@ -42,8 +43,8 @@ class ReportCommand extends Command {
         Binaries: ['Node', 'Yarn', 'npm'],
         Virtualization: ['Docker'],
         npmGlobalPackages: ['@adobe/aio-cli']
-      },{
-          json: false, console: false, showNotFound: true
+      }, {
+        json: false, console: false, showNotFound: true
       })
       const issueBody = issueTemplate.replace('%replaced%', resInfo)
       url = `${baseReportUrl}?body=${encodeURIComponent(issueBody)}&title=new+bug+report&label=bug`
@@ -71,4 +72,3 @@ ReportCommand.flags = {
 ReportCommand.description = 'Report an issue with the CLI or submit a feature request'
 
 module.exports = ReportCommand
-
