@@ -10,21 +10,20 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const {Command, flags} = require('@oclif/command')
+const { Command, flags } = require('@oclif/command')
 const envinfo = require('envinfo')
 
-
 class InfoCommand extends Command {
-  async run() {
+  async run () {
     const { flags } = this.parse(InfoCommand)
     const resInfo = await envinfo.run({
-        System: ['OS', 'CPU', 'Memory', 'Shell'],
-        Binaries: ['Node', 'Yarn', 'npm'],
-        Virtualization: ['Docker'],
-        npmGlobalPackages: [this.config.pjson.name]
-      },{
-        json: flags.json, console: false, showNotFound: true
-      })
+      System: ['OS', 'CPU', 'Memory', 'Shell'],
+      Binaries: ['Node', 'Yarn', 'npm'],
+      Virtualization: ['Docker'],
+      npmGlobalPackages: [this.config.pjson.name]
+    }, {
+      json: flags.json, console: false, showNotFound: true
+    })
     this.log(resInfo)
   }
 }
@@ -40,4 +39,3 @@ InfoCommand.flags = {
 InfoCommand.description = 'Display dev environment version information'
 
 module.exports = InfoCommand
-
