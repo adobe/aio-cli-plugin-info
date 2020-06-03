@@ -53,7 +53,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run', () => {
       command.argv = []
-      command.config = { pjson: { name: 'ima-cli' } }
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [] }
       envinfo.run.mockResolvedValue('ok')
       return command.run()
         .then(() => {
@@ -72,14 +72,14 @@ describe('instance methods', () => {
 
     test('calls envinfo.run --json', () => {
       command.argv = ['-j']
-      command.config = { pjson: { name: 'ima-cli' } }
-      envinfo.run.mockResolvedValue('ok')
+      command.config = { pjson: { name: 'ima-cli' } , plugins: [] }
+      envinfo.run.mockResolvedValue('{}')
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
             'Binaries':expect.any(Array),
             'System':expect.any(Array),
-            'Virtualization':expect.any(Array),
+             'Virtualization':expect.any(Array),
             'npmGlobalPackages':expect.any(Array),
           }), expect.objectContaining({
             'json': true,
@@ -89,4 +89,4 @@ describe('instance methods', () => {
         })
     })
   })
-})  
+})

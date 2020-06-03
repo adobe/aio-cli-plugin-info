@@ -13,11 +13,18 @@ governing permissions and limitations under the License.
 const {Command, flags} = require('@oclif/command')
 const envinfo = require('envinfo')
 
+const NEW_LINE = '\n'
+const INDENT = (n) => '  '.repeat(n)
+const AIO_PLUGINS = 'AioPlugins'
 
 class InfoCommand extends Command {
+
+
   async run() {
     const { flags } = this.parse(InfoCommand)
-    const resInfo = await envinfo.run({
+
+    try {
+      this.resInfo = await envinfo.run({
         System: ['OS', 'CPU', 'Memory', 'Shell'],
         Binaries: ['Node', 'Yarn', 'npm'],
         Virtualization: ['Docker'],
@@ -25,7 +32,32 @@ class InfoCommand extends Command {
       },{
         json: flags.json, console: false, showNotFound: true
       })
-    this.log(resInfo)
+      this.getAioPluginsInfo(flags)
+      this.log(this.resInfo)
+    } catch (e) {
+      this.error(e)
+    }
+  }
+
+
+  getAioPluginsInfo(flags) {
+    if(flags.json) {
+      let resInfo = JSON.parse(this.resInfo)
+      resInfo[AIO_PLUGINS] = {}
+      this.config.plugins.forEach(plugin => {
+        resInfo[AIO_PLUGINS][plugin.name] = {
+          version: plugin.version,
+          type: plugin.core
+        }
+      })
+      this.resInfo = JSON.stringify(resInfo, null, 2)
+    } else {
+      let output = INDENT(1) + `${AIO_PLUGINS}:` + NEW_LINE
+      this.config.plugins.forEach(plugin => {
+          output += INDENT(2) + `${plugin.name}: ${plugin.version} - ${plugin.type}` + NEW_LINE
+      })
+      this.resInfo += output
+    }
   }
 }
 
