@@ -79,7 +79,7 @@ describe('instance methods', () => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
             'Binaries':expect.any(Array),
             'System':expect.any(Array),
-             'Virtualization':expect.any(Array),
+            'Virtualization':expect.any(Array),
             'npmGlobalPackages':expect.any(Array),
           }), expect.objectContaining({
             'json': true,
