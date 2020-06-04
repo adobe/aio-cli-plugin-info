@@ -47,18 +47,36 @@ describe('instance methods', () => {
       expect(command.run).toBeInstanceOf(Function)
     })
 
-    test('calls envinfo.run for bug', () => {
+    test('calls envinfo.run for bugs (object)', () => {
       command.argv = []
       command.config = { pjson: { bugs: { url: 'some-link' } } }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
-            'Binaries': expect.any(Array),
-            'System': expect.any(Array),
-            'Virtualization': expect.any(Array),
-            'npmGlobalPackages': expect.any(Array),
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
           }), expect.objectContaining({
-            'console': false
+            console: false
+          }))
+          expect(stdout.output).toMatch('')
+          expect(cli.open).toHaveBeenCalled()
+        })
+    })
+
+    test('calls envinfo.run for bugs (string)', () => {
+      command.argv = []
+      command.config = { pjson: { bugs: 'some-link' } }
+      return command.run()
+        .then(() => {
+          expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
+          }), expect.objectContaining({
+            console: false
           }))
           expect(stdout.output).toMatch('')
           expect(cli.open).toHaveBeenCalled()
@@ -67,7 +85,7 @@ describe('instance methods', () => {
 
     test('does not call envinfo.run for feature', () => {
       command.argv = ['-f']
-      command.config = { pjson: { bugs: { url: 'some-link' } } } 
+      command.config = { pjson: { bugs: { url: 'some-link' } } }
       return command.run().then(() => {
         expect(envinfo.run).not.toHaveBeenCalled()
         expect(cli.open).toHaveBeenCalled()
@@ -79,10 +97,10 @@ describe('instance methods', () => {
       return new Promise((resolve, reject) => {
         command.argv = []
         command.config = { pjson: { bugs: { } } }
-        command.error = jest.fn(() => {throw new Error('Bang bang there goes your heart')})
+        command.error = jest.fn(() => { throw new Error('Bang bang there goes your heart') })
         return command.run()
           .then(() => {
-            reject('it should not reach here')
+            reject(new Error('it should not reach here'))
           }).catch(() => {
             expect(envinfo.run).not.toHaveBeenCalled()
             expect(stdout.output).toMatch('')
@@ -90,7 +108,8 @@ describe('instance methods', () => {
             expect(cli.open).not.toHaveBeenCalled()
             resolve()
           })
-        }
-    )})
+      }
+      )
+    })
   })
-})  
+})

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const {Command, flags} = require('@oclif/command')
+const { Command, flags } = require('@oclif/command')
 const envinfo = require('envinfo')
 
 const NEW_LINE = '\n'
@@ -18,7 +18,6 @@ const INDENT = (n) => '  '.repeat(n)
 const AIO_PLUGINS = 'AioPlugins'
 
 class InfoCommand extends Command {
-
 
   async run() {
     const { flags } = this.parse(InfoCommand)
@@ -38,7 +37,6 @@ class InfoCommand extends Command {
       this.error(e)
     }
   }
-
 
   getAioPluginsInfo(flags) {
     if(flags.json) {
@@ -72,4 +70,3 @@ InfoCommand.flags = {
 InfoCommand.description = 'Display dev environment version information'
 
 module.exports = InfoCommand
-

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const Command = require('../../src/commands/info')
-const {stdout} = require('stdout-stderr')
+const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
 
 jest.mock('envinfo')
@@ -31,6 +31,7 @@ test('flags', async () => {
   expect(Command.flags).toBeDefined()
 })
 
+// eslint-disable-next-line jest/no-commented-out-tests
 // test('args', async () => {
 //   expect(Command.args).toBeDefined()
 // })
@@ -58,13 +59,13 @@ describe('instance methods', () => {
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
-            'Binaries':expect.any(Array),
-            'System':expect.any(Array),
-            'Virtualization':expect.any(Array),
-            'npmGlobalPackages':expect.any(Array),
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
           }), expect.objectContaining({
-            'json': false,
-            'console': false
+            json: false,
+            console: false
           }))
           expect(stdout.output).toMatch('')
         })
@@ -77,13 +78,13 @@ describe('instance methods', () => {
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
-            'Binaries':expect.any(Array),
-            'System':expect.any(Array),
-            'Virtualization':expect.any(Array),
-            'npmGlobalPackages':expect.any(Array),
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
           }), expect.objectContaining({
-            'json': true,
-            'console': false
+            json: true,
+            console: false
           }))
           expect(stdout.output).toMatch('')
         })
