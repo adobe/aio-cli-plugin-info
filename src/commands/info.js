@@ -12,49 +12,46 @@ governing permissions and limitations under the License.
 
 const { Command, flags } = require('@oclif/command')
 const envinfo = require('envinfo')
-
-const NEW_LINE = '\n'
-const INDENT = (n) => '  '.repeat(n)
-const AIO_PLUGINS = 'AioPlugins'
+const chalk = require('chalk')
+const yaml = require('js-yaml')
 
 class InfoCommand extends Command {
-
-  async run() {
+  async run () {
     const { flags } = this.parse(InfoCommand)
 
     try {
-      this.resInfo = await envinfo.run({
+      const resInfo = await envinfo.run({
         System: ['OS', 'CPU', 'Memory', 'Shell'],
         Binaries: ['Node', 'Yarn', 'npm'],
         Virtualization: ['Docker'],
         npmGlobalPackages: [this.config.pjson.name]
-      },{
-        json: flags.json, console: false, showNotFound: true
+      }, {
+        json: flags.json || flags.yml,
+        console: false,
+        showNotFound: true
       })
-      this.getAioPluginsInfo(flags)
-      this.log(this.resInfo)
+
+      const plugins = this.config.plugins.filter(p => !p.parent)
+
+      if (flags.json || flags.yml) {
+        // format plugin info as json/yml
+        const resObj = JSON.parse(resInfo)
+        resObj['CLI Plugins'] = plugins.map(p => {
+          return { name: p.name, version: p.version, type: p.type }
+        })
+        if (flags.yml) {
+          this.log(yaml.safeDump(resObj))
+        } else {
+          this.log(JSON.stringify(resObj, 2))
+        }
+      } else {
+        this.log(resInfo + '  CLI plugins:')
+        for (const plugin of plugins) {
+          this.log(`    ${plugin.name} ` + chalk.gray(`${plugin.version} (${plugin.type})`))
+        }
+      }
     } catch (e) {
       this.error(e)
-    }
-  }
-
-  getAioPluginsInfo(flags) {
-    if(flags.json) {
-      let resInfo = JSON.parse(this.resInfo)
-      resInfo[AIO_PLUGINS] = {}
-      this.config.plugins.forEach(plugin => {
-        resInfo[AIO_PLUGINS][plugin.name] = {
-          version: plugin.version,
-          type: plugin.core
-        }
-      })
-      this.resInfo = JSON.stringify(resInfo, null, 2)
-    } else {
-      let output = INDENT(1) + `${AIO_PLUGINS}:` + NEW_LINE
-      this.config.plugins.forEach(plugin => {
-          output += INDENT(2) + `${plugin.name}: ${plugin.version} - ${plugin.type}` + NEW_LINE
-      })
-      this.resInfo += output
     }
   }
 }
@@ -64,6 +61,12 @@ InfoCommand.flags = {
     char: 'j',
     description: 'output raw json',
     default: false
+  }),
+  yml: flags.boolean({
+    char: 'y',
+    description: 'output yml',
+    default: false,
+    exclusive: ['json']
   })
 }
 
