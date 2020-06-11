@@ -8,18 +8,19 @@
     "@adobe/aio-lib-core-config": "^1.2.8",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
-    "@oclif/plugin-help": "^2.2.3",
     "@oclif/errors": "^1.1.2",
+    "@oclif/plugin-help": "^2.2.3",
     "cli-ux": "^5.4.6",
+    "chalk": "^4.0.0",
     "debug": "^4.1.0",
-    "envinfo": "^7.5.0"
+    "envinfo": "^7.5.0",
+    "js-yaml": "^3.14.0"
   },
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^1.2.0",
     "@oclif/dev-cli": "^1.21.3",
     "@oclif/test": "^1",
     "acorn": "^7.1.1",
-    "chalk": "^4.0.0",
     "eslint": "^6.2.2",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-standard": "^14.1.1",
@@ -57,9 +58,7 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "pretest": "eslint src test e2e",
-    "test": "npm run unit-tests",
-    "unit-tests": "jest --ci",
+    "test": "jest --ci && eslint src test e2e",
     "prepack": "oclif-dev manifest && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif-dev readme && git add README.md",

@@ -13,8 +13,10 @@ governing permissions and limitations under the License.
 const Command = require('../../src/commands/info')
 const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
+const yaml = require('js-yaml')
 
 jest.mock('envinfo')
+jest.mock('js-yaml')
 
 beforeAll(() => stdout.start())
 afterAll(() => stdout.stop())
@@ -54,7 +56,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run', () => {
       command.argv = []
-      command.config = { pjson: { name: 'ima-cli' } }
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       envinfo.run.mockResolvedValue('ok')
       return command.run()
         .then(() => {
@@ -73,8 +75,8 @@ describe('instance methods', () => {
 
     test('calls envinfo.run --json', () => {
       command.argv = ['-j']
-      command.config = { pjson: { name: 'ima-cli' } }
-      envinfo.run.mockResolvedValue('ok')
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      envinfo.run.mockResolvedValue('{}')
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -88,6 +90,34 @@ describe('instance methods', () => {
           }))
           expect(stdout.output).toMatch('')
         })
+    })
+
+    test('calls envinfo.run --yml', () => {
+      command.argv = ['-y']
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      envinfo.run.mockResolvedValue('{}')
+      yaml.safeDump.mockResolvedValue('yaml')
+      return command.run()
+        .then(() => {
+          expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
+            Binaries: expect.any(Array),
+            System: expect.any(Array),
+            Virtualization: expect.any(Array),
+            npmGlobalPackages: expect.any(Array)
+          }), expect.objectContaining({
+            json: true,
+            console: false
+          }))
+          expect(stdout.output).toMatch('')
+          expect(yaml.safeDump).toHaveBeenCalled()
+        })
+    })
+
+    test('catches error', async () => {
+      command.config = null
+      command.error = jest.fn()
+      await command.run()
+      expect(command.error).toHaveBeenCalled()
     })
   })
 })

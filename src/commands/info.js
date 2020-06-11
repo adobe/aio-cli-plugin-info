@@ -12,19 +12,47 @@ governing permissions and limitations under the License.
 
 const { Command, flags } = require('@oclif/command')
 const envinfo = require('envinfo')
+const chalk = require('chalk')
+const yaml = require('js-yaml')
 
 class InfoCommand extends Command {
   async run () {
     const { flags } = this.parse(InfoCommand)
-    const resInfo = await envinfo.run({
-      System: ['OS', 'CPU', 'Memory', 'Shell'],
-      Binaries: ['Node', 'Yarn', 'npm'],
-      Virtualization: ['Docker'],
-      npmGlobalPackages: [this.config.pjson.name]
-    }, {
-      json: flags.json, console: false, showNotFound: true
-    })
-    this.log(resInfo)
+
+    try {
+      const resInfo = await envinfo.run({
+        System: ['OS', 'CPU', 'Memory', 'Shell'],
+        Binaries: ['Node', 'Yarn', 'npm'],
+        Virtualization: ['Docker'],
+        npmGlobalPackages: [this.config.pjson.name]
+      }, {
+        json: flags.json || flags.yml,
+        console: false,
+        showNotFound: true
+      })
+
+      const plugins = this.config.plugins.filter(p => !p.parent)
+
+      if (flags.json || flags.yml) {
+        // format plugin info as json/yml
+        const resObj = JSON.parse(resInfo)
+        resObj['CLI Plugins'] = plugins.map(p => {
+          return { name: p.name, version: p.version, type: p.type }
+        })
+        if (flags.yml) {
+          this.log(yaml.safeDump(resObj))
+        } else {
+          this.log(JSON.stringify(resObj, 2))
+        }
+      } else {
+        this.log(resInfo + '  CLI plugins:')
+        for (const plugin of plugins) {
+          this.log(`    ${plugin.name} ` + chalk.gray(`${plugin.version} (${plugin.type})`))
+        }
+      }
+    } catch (e) {
+      this.error(e)
+    }
   }
 }
 
@@ -33,6 +61,12 @@ InfoCommand.flags = {
     char: 'j',
     description: 'output raw json',
     default: false
+  }),
+  yml: flags.boolean({
+    char: 'y',
+    description: 'output yml',
+    default: false,
+    exclusive: ['json']
   })
 }
 
