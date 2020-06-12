@@ -26,8 +26,17 @@ Environment info commands for troubleshooting, and reporting issues
 
 <!-- toc -->
 * [aio-cli-plugin-info](#aio-cli-plugin-info)
+* [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
+# Usage
+```sh-session
+$ aio plugins:install -g @adobe/aio-cli-plugin-info
+$ # OR
+$ aio discover -i
+$ aio info --help
+```
 
 # Commands
 <!-- commands -->
