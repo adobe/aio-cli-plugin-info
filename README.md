@@ -56,7 +56,7 @@ OPTIONS
   -y, --yml   output yml
 ```
 
-_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.0.0/src/commands/info.js)_
+_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.1.0/src/commands/info.js)_
 
 ## `aio report`
 
@@ -71,7 +71,7 @@ OPTIONS
   -f, --feature  request a feature
 ```
 
-_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.0.0/src/commands/report.js)_
+_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.1.0/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing
