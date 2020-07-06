@@ -5,7 +5,7 @@
   "homepage": "https://github.com/adobe/aio-cli-plugin-info",
   "bugs": "https://github.com/adobe/aio-cli-plugin-info/issues",
   "dependencies": {
-    "@adobe/aio-lib-core-config": "^1.2.8",
+    "@adobe/aio-lib-core-config": "^2.0.0",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/errors": "^1.1.2",
