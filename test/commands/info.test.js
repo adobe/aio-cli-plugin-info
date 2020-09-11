@@ -58,6 +58,7 @@ describe('instance methods', () => {
       command.argv = []
       command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       envinfo.run.mockResolvedValue('ok')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -77,6 +78,7 @@ describe('instance methods', () => {
       command.argv = ['-j']
       command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       envinfo.run.mockResolvedValue('{}')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -95,8 +97,10 @@ describe('instance methods', () => {
     test('calls envinfo.run --yml', () => {
       command.argv = ['-y']
       command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
       yaml.safeDump.mockResolvedValue('yaml')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -110,6 +114,7 @@ describe('instance methods', () => {
           }))
           expect(stdout.output).toMatch('')
           expect(yaml.safeDump).toHaveBeenCalled()
+          expect(command.warn).not.toHaveBeenCalled()
         })
     })
 
@@ -118,6 +123,15 @@ describe('instance methods', () => {
       command.error = jest.fn()
       await command.run()
       expect(command.error).toHaveBeenCalled()
+    })
+
+    test('warns if node is not supported', async () => {
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.warn = jest.fn()
+      envinfo.run.mockResolvedValue('{}')
+      envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
+      await command.run()
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10 and 12')
     })
   })
 })

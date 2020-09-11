@@ -50,6 +50,11 @@ class InfoCommand extends Command {
           this.log(`    ${plugin.name} ` + chalk.gray(`${plugin.version} (${plugin.type})`))
         }
       }
+
+      const nodeInfo = await envinfo.helpers.getNodeInfo()
+      if (!['10', '12'].includes(nodeInfo[1].split('.')[0])) {
+        this.warn('Node version not supported. Supported versions are 10 and 12')
+      }
     } catch (e) {
       this.error(e)
     }
