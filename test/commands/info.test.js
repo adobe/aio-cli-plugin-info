@@ -133,5 +133,14 @@ describe('instance methods', () => {
       await command.run()
       expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10 and 12')
     })
+
+    test('plugins list is sorted', async () => {
+      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }, { name: 'nam', version: 'version', type: 'type' }, { name: 'name1', version: 'version', type: 'type' }] }
+      command.warn = jest.fn()
+      envinfo.run.mockResolvedValue('{}')
+      envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
+      await command.run()
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10 and 12')
+    })
   })
 })

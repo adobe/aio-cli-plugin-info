@@ -31,7 +31,7 @@ class InfoCommand extends Command {
         showNotFound: true
       })
 
-      const plugins = this.config.plugins.filter(p => !p.parent)
+      const plugins = this.config.plugins.filter(p => !p.parent).sort((a, b) => a.name < b.name ? -1 : 1)
 
       if (flags.json || flags.yml) {
         // format plugin info as json/yml
