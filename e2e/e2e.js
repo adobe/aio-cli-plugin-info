@@ -22,7 +22,22 @@ test('boilerplate help test', async () => {
   console.log(chalk.blue(`> e2e tests for ${chalk.bold(name)}`))
 
   console.log(chalk.dim('    - boilerplate help ..'))
-  expect(() => { execa.sync('./bin/run', ['--help'], { stderr: 'inherit' }) }).not.toThrow()
+  const { stdout } = await execa('./bin/run', ['--help'], { stderr: 'inherit' })
+
+  expect(stdout).toContain('Adobe I/O CLI plugin to display dev environment version information')
+  expect(stdout).toContain('@adobe/aio-cli-plugin-info')
+
+  console.log(chalk.green(`    - done for ${chalk.bold(name)}`))
+})
+
+test('aio info', async () => {
+  const packagejson = JSON.parse(fs.readFileSync('package.json').toString())
+  const name = `${packagejson.name}`
+
+  const { stdout } = await execa('./bin/run', ['info'], { stderr: 'inherit' })
+
+  expect(stdout).toContain('npmGlobalPackages')
+  expect(stdout).toContain('@adobe/aio-cli-plugin-info')
 
   console.log(chalk.green(`    - done for ${chalk.bold(name)}`))
 })
