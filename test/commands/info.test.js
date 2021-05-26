@@ -100,7 +100,7 @@ describe('instance methods', () => {
       command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
       yaml.safeDump.mockResolvedValue('yaml')
-      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
+      envinfo.helpers = { getNodeInfo: () => ['', '14.5.0'] }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -131,7 +131,7 @@ describe('instance methods', () => {
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10 and 12')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12 and 14')
     })
 
     test('plugins list is sorted', async () => {
@@ -140,7 +140,7 @@ describe('instance methods', () => {
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10 and 12')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12 and 14')
     })
   })
 })
