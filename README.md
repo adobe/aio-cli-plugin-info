@@ -48,6 +48,8 @@ $ aio info --help
 Display dev environment version information
 
 ```
+Display dev environment version information
+
 USAGE
   $ aio info
 
@@ -56,13 +58,15 @@ OPTIONS
   -y, --yml   output yml
 ```
 
-_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.1.1/src/commands/info.js)_
+_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.2.0/src/commands/info.js)_
 
 ## `aio report`
 
 Report an issue with the CLI or submit a feature request
 
 ```
+Report an issue with the CLI or submit a feature request
+
 USAGE
   $ aio report
 
@@ -71,7 +75,7 @@ OPTIONS
   -f, --feature  request a feature
 ```
 
-_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.1.1/src/commands/report.js)_
+_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/1.2.0/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing
