@@ -52,8 +52,8 @@ class InfoCommand extends Command {
       }
 
       const nodeInfo = await envinfo.helpers.getNodeInfo()
-      if (!['12', '14'].includes(nodeInfo[1].split('.')[0])) {
-        this.warn('Node version not supported. Supported versions are 12 and 14')
+      if (!['10', '12', '14'].includes(nodeInfo[1].split('.')[0])) {
+        this.warn('Node version not supported. Supported versions are 10, 12 and 14')
       }
     } catch (e) {
       this.error(e)
