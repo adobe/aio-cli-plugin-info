@@ -16,6 +16,22 @@ const chalk = require('chalk')
 const yaml = require('js-yaml')
 
 class InfoCommand extends Command {
+  printPlugin (plugin) {
+    const nameAndVersion = `    ${plugin.name} ${chalk.gray(plugin.version)}`
+    switch (plugin.type) {
+      case 'user':
+        this.log(`${nameAndVersion} ${chalk.yellow(`(${plugin.type})`)}`)
+        break
+      case 'link':
+        this.log(`${nameAndVersion} ${chalk.blue(`(${plugin.type})`)}`)
+        break
+      case 'core':
+      default:
+        this.log(`${nameAndVersion} ${chalk.gray(`(${plugin.type})`)}`)
+        break
+    }
+  }
+
   async run () {
     const { flags } = this.parse(InfoCommand)
 
@@ -31,7 +47,14 @@ class InfoCommand extends Command {
         showNotFound: true
       })
 
-      const plugins = this.config.plugins.filter(p => !p.parent).sort((a, b) => a.name < b.name ? -1 : 1)
+      const plugins = this.config.plugins
+        .filter(p => !p.parent)
+        .sort((a, b) => a.name < b.name ? -1 : 1)
+
+      const corePlugins = this.config.pjson.oclif.plugins
+      const userInstalledCorePlugins = plugins
+        .filter(p => p.type === 'user')
+        .filter(p => corePlugins.includes(p.name))
 
       if (flags.json || flags.yml) {
         // format plugin info as json/yml
@@ -45,15 +68,22 @@ class InfoCommand extends Command {
           this.log(JSON.stringify(resObj, 2))
         }
       } else {
-        this.log(resInfo + '  CLI plugins:')
+        this.log(resInfo)
+        this.log('  CLI plugins:')
         for (const plugin of plugins) {
-          this.log(`    ${plugin.name} ` + chalk.gray(`${plugin.version} (${plugin.type})`))
+          this.printPlugin(plugin)
+        }
+        if (userInstalledCorePlugins.length > 0) {
+          this.log(chalk.red('  warning: these core plugin(s) are user installed:'))
+          for (const plugin of userInstalledCorePlugins) {
+            this.printPlugin(plugin)
+          }
         }
       }
 
       const nodeInfo = await envinfo.helpers.getNodeInfo()
       if (!['10', '12', '14'].includes(nodeInfo[1].split('.')[0])) {
-        this.warn('Node version not supported. Supported versions are 10, 12 and 14')
+        this.warn('Node version not supported. Supported versions are 10, 12, and 14')
       }
     } catch (e) {
       this.error(e)
