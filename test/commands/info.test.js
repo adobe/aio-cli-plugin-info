@@ -14,6 +14,8 @@ const Command = require('../../src/commands/info')
 const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
 const yaml = require('js-yaml')
+const actualYaml = jest.requireActual('js-yaml')
+const dedent = require('dedent')
 
 jest.mock('envinfo')
 jest.mock('js-yaml')
@@ -33,11 +35,6 @@ test('flags', async () => {
   expect(Command.flags).toBeDefined()
 })
 
-// eslint-disable-next-line jest/no-commented-out-tests
-// test('args', async () => {
-//   expect(Command.args).toBeDefined()
-// })
-
 test('aliases', async () => {
   expect(Command.aliases).toBeDefined()
 })
@@ -49,6 +46,20 @@ describe('instance methods', () => {
     command = new Command([])
   })
 
+  test('indentString', () => {
+    const string = 'mystring'
+    const result = command.indentString(string)
+    expect(result).toEqual('  ' + string)
+  })
+
+  test('printPlugin', () => {
+    command.printPlugin({ name: 'name', version: 'version' })
+    expect(stdout.output).toEqual(command.indentString('name version\n', 6))
+
+    command.printPlugin({ name: 'name2', version: 'version2', asterisk: true })
+    expect(stdout.output).toMatch(command.indentString('name2 version2 (*)\n', 6))
+  })
+
   describe('run', () => {
     test('exists', async () => {
       expect(command.run).toBeInstanceOf(Function)
@@ -56,7 +67,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run', () => {
       command.argv = []
-      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       envinfo.run.mockResolvedValue('ok')
       envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
@@ -74,9 +85,156 @@ describe('instance methods', () => {
         })
     })
 
+    test('cli plugins (core, user, link) stdout', () => {
+      command.argv = []
+      command.config = {
+        pjson: {
+          name: 'ima-cli',
+          oclif: {
+            plugins: [
+              'core-plugin-a',
+              'core-plugin-b'
+            ]
+          }
+        },
+        plugins: [
+          { name: 'core-plugin-a', version: 'version', type: 'core' },
+          { name: 'core-plugin-b', version: 'version', type: 'user' }, // user installed core plugin
+          { name: 'user-plugin', version: 'version', type: 'user' },
+          { name: 'link-plugin', version: 'version', type: 'link' }
+        ]
+      }
+
+      const result = `
+  CLI plugins:
+    core:
+      core-plugin-a version
+    user:
+      core-plugin-b version (*)
+      user-plugin version
+    link:
+      link-plugin version\n`
+
+      envinfo.run.mockResolvedValue('')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
+      return command.run()
+        .then(() => {
+          expect(stdout.output).toMatch(result)
+        })
+    })
+
+    test('cli plugins (core, user, link) --json', () => {
+      command.argv = ['-j']
+      command.config = {
+        pjson: {
+          name: 'ima-cli',
+          oclif: {
+            plugins: [
+              'core-plugin-a',
+              'core-plugin-b'
+            ]
+          }
+        },
+        plugins: [
+          { name: 'core-plugin-a', version: 'version', type: 'core' },
+          { name: 'core-plugin-b', version: 'version', type: 'user' }, // user installed core plugin
+          { name: 'user-plugin', version: 'version', type: 'user' },
+          { name: 'link-plugin', version: 'version', type: 'link' }
+        ]
+      }
+
+      const result = {
+        'CLI Plugins': {
+          core: [
+            {
+              name: 'core-plugin-a',
+              version: 'version',
+              type: 'core'
+            }
+          ],
+          user: [
+            {
+              name: 'core-plugin-b',
+              version: 'version',
+              type: 'user',
+              overrides_core_plugin: true
+            },
+            {
+              name: 'user-plugin',
+              version: 'version',
+              type: 'user'
+            }
+          ],
+          link: [
+            {
+              name: 'link-plugin',
+              version: 'version',
+              type: 'link'
+            }
+          ]
+        }
+      }
+
+      envinfo.run.mockResolvedValue('{}')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
+      return command.run()
+        .then(() => {
+          expect(stdout.output).toMatch(JSON.stringify(result, null, 2))
+        })
+    })
+
+    test('cli plugins (core, user, link) --yml', async () => {
+      command.argv = ['-y']
+      command.config = {
+        pjson: {
+          name: 'ima-cli',
+          oclif: {
+            plugins: [
+              'core-plugin-a',
+              'core-plugin-b'
+            ]
+          }
+        },
+        plugins: [
+          { name: 'core-plugin-a', version: 'version', type: 'core' },
+          { name: 'core-plugin-b', version: 'version', type: 'user' }, // user installed core plugin
+          { name: 'user-plugin', version: 'version', type: 'user' },
+          { name: 'link-plugin', version: 'version', type: 'link' }
+        ]
+      }
+
+      const result = dedent`
+      CLI Plugins:
+        core:
+          - name: core-plugin-a
+            version: version
+            type: core
+        user:
+          - name: core-plugin-b
+            version: version
+            type: user
+            overrides_core_plugin: true
+          - name: user-plugin
+            version: version
+            type: user
+        link:
+          - name: link-plugin
+            version: version
+            type: link\n\n
+      `
+
+      envinfo.run.mockResolvedValue('{}')
+      yaml.safeDump.mockImplementation((json) => actualYaml.safeDump(json))
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
+      return command.run()
+        .then(() => {
+          expect(stdout.output).toEqual(result)
+        })
+    })
+
     test('calls envinfo.run --json', () => {
       command.argv = ['-j']
-      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
@@ -96,10 +254,10 @@ describe('instance methods', () => {
 
     test('calls envinfo.run --yml', () => {
       command.argv = ['-y']
-      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
-      yaml.safeDump.mockResolvedValue('yaml')
+      yaml.safeDump.mockReturnValue('yaml')
       envinfo.helpers = { getNodeInfo: () => ['', '14.5.0'] }
       return command.run()
         .then(() => {
@@ -126,21 +284,21 @@ describe('instance methods', () => {
     })
 
     test('warns if node is not supported', async () => {
-      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
+      command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12 and 14')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12, and 14')
     })
 
     test('plugins list is sorted', async () => {
-      command.config = { pjson: { name: 'ima-cli' }, plugins: [{ name: 'name', version: 'version', type: 'type' }, { name: 'nam', version: 'version', type: 'type' }, { name: 'name1', version: 'version', type: 'type' }] }
+      command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }, { name: 'nam', version: 'version', type: 'type' }, { name: 'name1', version: 'version', type: 'type' }] }
       command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12 and 14')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12, and 14')
     })
   })
 })

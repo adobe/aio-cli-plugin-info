@@ -16,20 +16,13 @@ const chalk = require('chalk')
 const yaml = require('js-yaml')
 
 class InfoCommand extends Command {
-  printPlugin (plugin) {
-    const nameAndVersion = `    ${plugin.name} ${chalk.gray(plugin.version)}`
-    switch (plugin.type) {
-      case 'user':
-        this.log(`${nameAndVersion} ${chalk.yellow(`(${plugin.type})`)}`)
-        break
-      case 'link':
-        this.log(`${nameAndVersion} ${chalk.blue(`(${plugin.type})`)}`)
-        break
-      case 'core':
-      default:
-        this.log(`${nameAndVersion} ${chalk.gray(`(${plugin.type})`)}`)
-        break
-    }
+  indentString (string, count = 2, indent = ' ') {
+    return `${indent.repeat(count)}${string}`
+  }
+
+  printPlugin (plugin, count = 6, indent = ' ') {
+    const asterisk = plugin.asterisk ? chalk.yellow(' (*)') : ''
+    this.log(this.indentString(`${plugin.name} ${chalk.gray(plugin.version)}${asterisk}`, count, indent))
   }
 
   async run () {
@@ -51,34 +44,52 @@ class InfoCommand extends Command {
         .filter(p => !p.parent)
         .sort((a, b) => a.name < b.name ? -1 : 1)
 
-      const corePlugins = this.config.pjson.oclif.plugins
-      const userInstalledCorePlugins = plugins
+      const packageJsonCorePlugins = this.config.pjson.oclif.plugins
+      const corePlugins = plugins.filter(p => p.type === 'core')
+      const userPlugins = plugins
         .filter(p => p.type === 'user')
-        .filter(p => corePlugins.includes(p.name))
+        .map(p => {
+          return {
+            ...p,
+            asterisk: packageJsonCorePlugins.includes(p.name)
+          }
+        })
+      const linkPlugins = plugins.filter(p => p.type === 'link')
 
       if (flags.json || flags.yml) {
         // format plugin info as json/yml
         const resObj = JSON.parse(resInfo)
-        resObj['CLI Plugins'] = plugins.map(p => {
-          return { name: p.name, version: p.version, type: p.type }
-        })
+        const mapPlugin = p => {
+          const _p = {
+            name: p.name,
+            version: p.version,
+            type: p.type
+          }
+          if (p.type === 'user' && p.asterisk) {
+            _p.overrides_core_plugin = true
+          }
+          return _p
+        }
+
+        resObj['CLI Plugins'] = {
+          core: corePlugins.map(mapPlugin),
+          user: userPlugins.map(mapPlugin),
+          link: linkPlugins.map(mapPlugin)
+        }
         if (flags.yml) {
           this.log(yaml.safeDump(resObj))
         } else {
-          this.log(JSON.stringify(resObj, 2))
+          this.log(JSON.stringify(resObj, null, 2))
         }
       } else {
         this.log(resInfo)
-        this.log('  CLI plugins:')
-        for (const plugin of plugins) {
-          this.printPlugin(plugin)
-        }
-        if (userInstalledCorePlugins.length > 0) {
-          this.log(chalk.red('  warning: these core plugin(s) are user installed:'))
-          for (const plugin of userInstalledCorePlugins) {
-            this.printPlugin(plugin)
-          }
-        }
+        this.log(this.indentString('CLI plugins:', 2))
+        this.log(this.indentString('core:', 4))
+        corePlugins.forEach(p => this.printPlugin(p))
+        this.log(this.indentString('user:', 4))
+        userPlugins.forEach(p => this.printPlugin(p))
+        this.log(this.indentString('link:', 4))
+        linkPlugins.forEach(p => this.printPlugin(p))
       }
 
       const nodeInfo = await envinfo.helpers.getNodeInfo()
