@@ -131,13 +131,15 @@ describe('instance methods', () => {
           oclif: {
             plugins: [
               'core-plugin-a',
-              'core-plugin-b'
+              'core-plugin-b',
+              'core-plugin-c'
             ]
           }
         },
         plugins: [
           { name: 'core-plugin-a', version: 'version', type: 'core' },
           { name: 'core-plugin-b', version: 'version', type: 'user' }, // user installed core plugin
+          { name: 'core-plugin-c', version: 'version', type: 'link' }, // link installed core plugin
           { name: 'user-plugin', version: 'version', type: 'user' },
           { name: 'link-plugin', version: 'version', type: 'link' }
         ]
@@ -166,6 +168,12 @@ describe('instance methods', () => {
             }
           ],
           link: [
+            {
+              name: 'core-plugin-c',
+              version: 'version',
+              type: 'link',
+              overrides_core_plugin: true
+            },
             {
               name: 'link-plugin',
               version: 'version',
