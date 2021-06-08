@@ -66,7 +66,7 @@ class InfoCommand extends Command {
             version: p.version,
             type: p.type
           }
-          if (p.type === 'user' && p.asterisk) {
+          if (p.asterisk && (p.type === 'user' || p.type === 'link')) {
             _p.overrides_core_plugin = true
           }
           return _p
