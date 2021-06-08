@@ -46,15 +46,16 @@ class InfoCommand extends Command {
 
       const packageJsonCorePlugins = this.config.pjson.oclif.plugins
       const corePlugins = plugins.filter(p => p.type === 'core')
-      const userPlugins = plugins
-        .filter(p => p.type === 'user')
-        .map(p => {
-          return {
-            ...p,
-            asterisk: packageJsonCorePlugins.includes(p.name)
-          }
-        })
-      const linkPlugins = plugins.filter(p => p.type === 'link')
+
+      const mapAsterisk = p => {
+        return {
+          ...p,
+          asterisk: packageJsonCorePlugins.includes(p.name)
+        }
+      }
+
+      const userPlugins = plugins.filter(p => p.type === 'user').map(mapAsterisk)
+      const linkPlugins = plugins.filter(p => p.type === 'link').map(mapAsterisk)
 
       if (flags.json || flags.yml) {
         // format plugin info as json/yml
