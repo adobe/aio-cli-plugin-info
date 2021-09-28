@@ -61,7 +61,8 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "test": "jest --ci && eslint src test e2e",
+    "lint": "eslint src test e2e",
+    "test": "jest --ci && npm run lint",
     "prepack": "oclif-dev manifest && oclif-dev readme",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif-dev readme && git add README.md",

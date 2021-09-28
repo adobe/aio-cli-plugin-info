@@ -60,6 +60,14 @@ describe('instance methods', () => {
     expect(stdout.output).toMatch(command.indentString('name2 version2 (*)\n', 6))
   })
 
+  test('printProxy', () => {
+    command.printProxy(['http'])
+    expect(stdout.output).toEqual(command.indentString('http: (not set)\n', 4))
+
+    command.printProxy(['https', 'https://foo.bar'])
+    expect(stdout.output).toMatch(command.indentString('https: https://foo.bar\n', 4))
+  })
+
   describe('run', () => {
     test('exists', async () => {
       expect(command.run).toBeInstanceOf(Function)
@@ -85,7 +93,7 @@ describe('instance methods', () => {
         })
     })
 
-    test('cli plugins (core, user, link) stdout', () => {
+    test('proxies, cli plugins (core, user, link) stdout', () => {
       command.argv = []
       command.config = {
         pjson: {
@@ -106,6 +114,9 @@ describe('instance methods', () => {
       }
 
       const result = `
+  Proxies:
+    http: (not set)
+    https: (not set)
   CLI plugins:
     core:
       core-plugin-a version
@@ -123,7 +134,7 @@ describe('instance methods', () => {
         })
     })
 
-    test('cli plugins (core, user, link) --json', () => {
+    test('proxies, cli plugins (core, user, link) --json', () => {
       command.argv = ['-j']
       command.config = {
         pjson: {
@@ -146,6 +157,10 @@ describe('instance methods', () => {
       }
 
       const result = {
+        Proxies: {
+          http: '',
+          https: ''
+        },
         'CLI Plugins': {
           core: [
             {
@@ -191,7 +206,7 @@ describe('instance methods', () => {
         })
     })
 
-    test('cli plugins (core, user, link) --yml', async () => {
+    test('proxies, cli plugins (core, user, link) --yml', async () => {
       command.argv = ['-y']
       command.config = {
         pjson: {
@@ -212,6 +227,9 @@ describe('instance methods', () => {
       }
 
       const result = dedent`
+      Proxies:
+        http: ''
+        https: ''
       CLI Plugins:
         core:
           - name: core-plugin-a

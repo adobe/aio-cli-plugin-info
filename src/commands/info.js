@@ -26,8 +26,8 @@ class InfoCommand extends Command {
     this.log(this.indentString(`${plugin.name} ${chalk.gray(plugin.version)}${asterisk}`, count, indent))
   }
 
-  printProxy([key, value], count = 6, indent = ' ') {
-    const url = value ? value : '(not set)'
+  printProxy ([key, value], count = 4, indent = ' ') {
+    const url = value || '(not set)'
     this.log(this.indentString(`${key}: ${chalk.gray(url)}`, count, indent))
   }
 
@@ -65,7 +65,7 @@ class InfoCommand extends Command {
 
       const proxies = {
         http: getProxyForUrl('http://anyhost'),
-        https: getProxyForUrl('https://anyhost'),
+        https: getProxyForUrl('https://anyhost')
       }
 
       if (flags.json || flags.yml) {
@@ -83,7 +83,7 @@ class InfoCommand extends Command {
           return _p
         }
 
-        resObj['Proxies'] = proxies
+        resObj.Proxies = proxies
 
         resObj['CLI Plugins'] = {
           core: corePlugins.map(mapPlugin),
