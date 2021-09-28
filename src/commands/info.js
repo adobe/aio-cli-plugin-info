@@ -14,6 +14,7 @@ const { Command, flags } = require('@oclif/command')
 const envinfo = require('envinfo')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
+const { getProxyForUrl } = require('proxy-from-env')
 
 class InfoCommand extends Command {
   indentString (string, count = 2, indent = ' ') {
@@ -23,6 +24,11 @@ class InfoCommand extends Command {
   printPlugin (plugin, count = 6, indent = ' ') {
     const asterisk = plugin.asterisk ? chalk.yellow(' (*)') : ''
     this.log(this.indentString(`${plugin.name} ${chalk.gray(plugin.version)}${asterisk}`, count, indent))
+  }
+
+  printProxy([key, value], count = 6, indent = ' ') {
+    const url = value ? value : '(not set)'
+    this.log(this.indentString(`${key}: ${chalk.gray(url)}`, count, indent))
   }
 
   async run () {
@@ -57,6 +63,11 @@ class InfoCommand extends Command {
       const userPlugins = plugins.filter(p => p.type === 'user').map(mapAsterisk)
       const linkPlugins = plugins.filter(p => p.type === 'link').map(mapAsterisk)
 
+      const proxies = {
+        http: getProxyForUrl('http://anyhost'),
+        https: getProxyForUrl('https://anyhost'),
+      }
+
       if (flags.json || flags.yml) {
         // format plugin info as json/yml
         const resObj = JSON.parse(resInfo)
@@ -72,6 +83,8 @@ class InfoCommand extends Command {
           return _p
         }
 
+        resObj['Proxies'] = proxies
+
         resObj['CLI Plugins'] = {
           core: corePlugins.map(mapPlugin),
           user: userPlugins.map(mapPlugin),
@@ -84,6 +97,8 @@ class InfoCommand extends Command {
         }
       } else {
         this.log(resInfo)
+        this.log(this.indentString('Proxies:', 2))
+        Object.entries(proxies).forEach(p => this.printProxy(p))
         this.log(this.indentString('CLI plugins:', 2))
         this.log(this.indentString('core:', 4))
         corePlugins.forEach(p => this.printPlugin(p))
