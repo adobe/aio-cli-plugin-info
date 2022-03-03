@@ -10,8 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Command, flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Command, Flags, CliUx: { ux: cli } } = require('@oclif/core')
 const envinfo = require('envinfo')
 
 // ///////////////
@@ -41,7 +40,7 @@ class ReportCommand extends Command {
   }
 
   async run () {
-    const { flags } = this.parse(ReportCommand)
+    const { flags } = await this.parse(ReportCommand)
 
     const bugsUrl = this.bugsUrl()
     const baseReportUrl = `${bugsUrl}/new/`
@@ -65,13 +64,13 @@ class ReportCommand extends Command {
 }
 
 ReportCommand.flags = {
-  bug: flags.boolean({
+  bug: Flags.boolean({
     char: 'b',
     default: true,
     description: 'report an issue',
     exclusive: ['feature']
   }),
-  feature: flags.boolean({
+  feature: Flags.boolean({
     char: 'f',
     default: false,
     description: 'request a feature',
