@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/@adobe/aio-cli-plugin-info.svg)](https://npmjs.org/package/@adobe/aio-cli-plugin-info)
 [![Downloads/week](https://img.shields.io/npm/dw/@adobe/aio-cli-plugin-info.svg)](https://npmjs.org/package/@adobe/aio-cli-plugin-info)
-[![Build Status](https://travis-ci.com/adobe/aio-cli-plugin-info.svg?branch=master)](https://travis-ci.com/adobe/aio-cli-plugin-info)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-cli-plugin-info/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-cli-plugin-info/)
 [![Github Issues](https://img.shields.io/github/issues/adobe/aio-cli-plugin-info.svg)](https://github.com/adobe/aio-cli-plugin-info/issues)
 [![Github Pull Requests](https://img.shields.io/github/issues-pr/adobe/aio-cli-plugin-info.svg)](https://github.com/adobe/aio-cli-plugin-info/pulls) 
@@ -58,7 +57,7 @@ OPTIONS
   -y, --yml   output yml
 ```
 
-_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.0.0/src/commands/info.js)_
+_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/info.js)_
 
 ## `aio report`
 
@@ -75,7 +74,7 @@ OPTIONS
   -f, --feature  request a feature
 ```
 
-_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.0.0/src/commands/report.js)_
+_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/report.js)_
 <!-- commandsstop -->
 
 ## Contributing
