@@ -16,9 +16,13 @@ const envinfo = require('envinfo')
 const yaml = require('js-yaml')
 const actualYaml = jest.requireActual('js-yaml')
 const dedent = require('dedent')
+const { getProxyForUrl } = require('proxy-from-env')
 
 jest.mock('envinfo')
 jest.mock('js-yaml')
+jest.mock('proxy-from-env', () => ({
+  getProxyForUrl: jest.fn()
+}))
 
 beforeAll(() => stdout.start())
 afterAll(() => stdout.stop())
@@ -68,7 +72,20 @@ describe('instance methods', () => {
     expect(stdout.output).toMatch(command.indentString('https: https://foo.bar\n', 4))
   })
 
+  test('proxyIsValid', () => {
+    expect(command.proxyIsValid('http', 'http://foo.bar')).toEqual(true)
+    expect(command.proxyIsValid('http', 'https://foo.bar')).toEqual(false)
+
+    expect(command.proxyIsValid('https', 'https://foo.bar')).toEqual(true)
+    expect(command.proxyIsValid('https', 'http://foo.bar')).toEqual(false)
+  })
+
   describe('run', () => {
+    beforeEach(() => {
+      getProxyForUrl.mockRestore()
+      getProxyForUrl.mockReturnValue('')
+    })
+
     test('exists', async () => {
       expect(command.run).toBeInstanceOf(Function)
     })
@@ -117,6 +134,55 @@ describe('instance methods', () => {
   Proxies:
     http: (not set)
     https: (not set)
+  CLI plugins:
+    core:
+      core-plugin-a version
+    user:
+      core-plugin-b version (*)
+      user-plugin version
+    link:
+      link-plugin version\n`
+
+      envinfo.run.mockResolvedValue('')
+      envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
+      return command.run()
+        .then(() => {
+          expect(stdout.output).toMatch(result)
+        })
+    })
+
+    test('proxies (mismatch), cli plugins (core, user, link) stdout', () => {
+      getProxyForUrl.mockImplementation((url) => {
+        if (url.startsWith('http://')) {
+          return 'https://foo.bar'
+        } else {
+          return 'http://foo.bar'
+        }
+      })
+
+      command.argv = []
+      command.config = {
+        pjson: {
+          name: 'ima-cli',
+          oclif: {
+            plugins: [
+              'core-plugin-a',
+              'core-plugin-b'
+            ]
+          }
+        },
+        plugins: [
+          { name: 'core-plugin-a', version: 'version', type: 'core' },
+          { name: 'core-plugin-b', version: 'version', type: 'user' }, // user installed core plugin
+          { name: 'user-plugin', version: 'version', type: 'user' },
+          { name: 'link-plugin', version: 'version', type: 'link' }
+        ]
+      }
+
+      const result = `
+  Proxies:
+    http: https://foo.bar (scheme mismatch)
+    https: http://foo.bar (scheme mismatch)
   CLI plugins:
     core:
       core-plugin-a version
