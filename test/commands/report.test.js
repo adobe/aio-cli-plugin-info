@@ -13,9 +13,18 @@ governing permissions and limitations under the License.
 const Command = require('../../src/commands/report')
 const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
-const { cli } = require('cli-ux')
-
 jest.mock('envinfo')
+jest.mock('@oclif/core', () => {
+  return {
+    ...jest.requireActual('@oclif/core'),
+    CliUx: {
+      ux: {
+        open: jest.fn()
+      }
+    }
+  }
+})
+const { CliUx: { ux: cli } } = require('@oclif/core')
 
 test('exports', async () => {
   expect(typeof Command).toEqual('function')

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Command, flags } = require('@oclif/command')
+const { Command, Flags } = require('@oclif/core')
 const envinfo = require('envinfo')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
@@ -42,7 +42,7 @@ class InfoCommand extends Command {
   }
 
   async run () {
-    const { flags } = this.parse(InfoCommand)
+    const { flags } = await this.parse(InfoCommand)
 
     try {
       const resInfo = await envinfo.run({
@@ -129,12 +129,12 @@ class InfoCommand extends Command {
 }
 
 InfoCommand.flags = {
-  json: flags.boolean({
+  json: Flags.boolean({
     char: 'j',
     description: 'output raw json',
     default: false
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     char: 'y',
     description: 'output yml',
     default: false,
