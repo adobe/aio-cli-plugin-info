@@ -28,7 +28,17 @@ class InfoCommand extends Command {
 
   printProxy ([key, value], count = 4, indent = ' ') {
     const url = value || '(not set)'
-    this.log(this.indentString(`${key}: ${chalk.gray(url)}`, count, indent))
+    let error = ''
+    if (value && !this.proxyIsValid(key, value)) {
+      error = chalk.red(' (scheme mismatch)')
+    }
+
+    this.log(this.indentString(`${key}: ${chalk.gray(url)}${error}`, count, indent))
+  }
+
+  // check proxy (scheme mismatch)
+  proxyIsValid (key, value) {
+    return value.trim().startsWith(`${key}://`)
   }
 
   async run () {

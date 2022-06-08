@@ -46,7 +46,7 @@ class ReportCommand extends Command {
     const baseReportUrl = `${bugsUrl}/new/`
     let url
     if (flags.feature) {
-      url = `${baseReportUrl}?body=&title=new+feature+request&label=enhancement`
+      url = `${baseReportUrl}?body=&title=new+feature+request&labels=enhancement`
     } else {
       const resInfo = await envinfo.run({
         System: ['OS', 'CPU', 'Memory', 'Shell'],
@@ -57,7 +57,7 @@ class ReportCommand extends Command {
         json: false, console: false, showNotFound: true
       })
       const issueBody = issueTemplate.replace('%replaced%', resInfo)
-      url = `${baseReportUrl}?body=${encodeURIComponent(issueBody)}&title=new+bug+report&label=bug`
+      url = `${baseReportUrl}?body=${encodeURIComponent(issueBody)}&title=new+bug+report&labels=bug`
     }
     cli.open(url)
   }
