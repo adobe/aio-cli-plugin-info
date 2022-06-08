@@ -47,34 +47,36 @@ $ aio info --help
 Display dev environment version information
 
 ```
-Display dev environment version information
-
 USAGE
-  $ aio info
+  $ aio info [-y | -j]
 
-OPTIONS
+FLAGS
   -j, --json  output raw json
   -y, --yml   output yml
+
+DESCRIPTION
+  Display dev environment version information
 ```
 
-_See code: [src/commands/info.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/info.js)_
+_See code: [src/commands/info.ts](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/info.ts)_
 
 ## `aio report`
 
 Report an issue with the CLI or submit a feature request
 
 ```
-Report an issue with the CLI or submit a feature request
-
 USAGE
-  $ aio report
+  $ aio report [-b | -f]
 
-OPTIONS
+FLAGS
   -b, --bug      report an issue
   -f, --feature  request a feature
+
+DESCRIPTION
+  Report an issue with the CLI or submit a feature request
 ```
 
-_See code: [src/commands/report.js](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/report.js)_
+_See code: [src/commands/report.ts](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/report.ts)_
 <!-- commandsstop -->
 
 ## Contributing

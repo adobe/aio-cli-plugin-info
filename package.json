@@ -32,7 +32,8 @@
     "jest-junit": "^13.0.0",
     "jest-resolve": "^27.5.1",
     "stdout-stderr": "^0.1.13",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "oclif": "^3.0.1"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"
@@ -54,9 +55,9 @@
   "scripts": {
     "lint": "eslint src test e2e",
     "test": "jest --ci && npm run lint",
-    "prepack": "oclif-dev manifest && oclif-dev readme",
+    "prepack": "oclif manifest && oclif readme",
     "postpack": "rm -f oclif.manifest.json",
-    "version": "oclif-dev readme && git add README.md",
+    "version": "oclif readme && git add README.md",
     "e2e": "jest --collectCoverage=false --testRegex './e2e/e2e.js'"
   },
   "jest": {
