@@ -381,7 +381,7 @@ describe('instance methods', () => {
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12, and 14')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 14, 16, and 18')
     })
 
     test('plugins list is sorted', async () => {
@@ -390,7 +390,7 @@ describe('instance methods', () => {
       envinfo.run.mockResolvedValue('{}')
       envinfo.helpers = { getNodeInfo: () => ['', '13.5.0'] }
       await command.run()
-      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 10, 12, and 14')
+      expect(command.warn).toHaveBeenCalledWith('Node version not supported. Supported versions are 14, 16, and 18')
     })
   })
 })
