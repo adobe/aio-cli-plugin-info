@@ -58,7 +58,7 @@ DESCRIPTION
   Display dev environment version information
 ```
 
-_See code: [src/commands/info.ts](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/info.ts)_
+_See code: [src/commands/info.ts](https://github.com/adobe/aio-cli-plugin-info/blob/3.0.0/src/commands/info.ts)_
 
 ## `aio report`
 
@@ -76,7 +76,7 @@ DESCRIPTION
   Report an issue with the CLI or submit a feature request
 ```
 
-_See code: [src/commands/report.ts](https://github.com/adobe/aio-cli-plugin-info/blob/2.1.0/src/commands/report.ts)_
+_See code: [src/commands/report.ts](https://github.com/adobe/aio-cli-plugin-info/blob/3.0.0/src/commands/report.ts)_
 <!-- commandsstop -->
 
 ## Contributing
