@@ -32,7 +32,6 @@
     "jest-junit": "^13.0.0",
     "jest-resolve": "^27.5.1",
     "stdout-stderr": "^0.1.13",
-    "typescript": "^4.6.2",
     "oclif": "^3.2.0"
   },
   "engines": {
@@ -49,6 +48,7 @@
   "oclif": {
     "commands": "./src/commands",
     "bin": "aio",
+    "topicSeparator": " ",
     "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>"
   },
   "main": "src/index.js",
