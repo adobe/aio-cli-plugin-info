@@ -1,7 +1,7 @@
 {
   "name": "@adobe/aio-cli-plugin-info",
   "description": "Adobe I/O CLI plugin to display dev environment version information",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "repository": "adobe/aio-cli-plugin-info",
   "homepage": "https://github.com/adobe/aio-cli-plugin-info",
   "bugs": "https://github.com/adobe/aio-cli-plugin-info/issues",
@@ -33,8 +33,7 @@
     "jest-junit": "^13.0.0",
     "jest-resolve": "^27.5.1",
     "stdout-stderr": "^0.1.13",
-    "typescript": "^4.6.2",
-    "oclif": "^3.0.1"
+    "oclif": "^3.2.0"
   },
   "engines": {
     "node": "^14.18 || ^16.13 || >=18"
@@ -50,13 +49,14 @@
   "oclif": {
     "commands": "./src/commands",
     "bin": "aio",
+    "topicSeparator": " ",
     "repositoryPrefix": "<%- repo %>/blob/<%- version %>/<%- commandPath %>"
   },
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src test e2e",
     "test": "jest --ci && npm run lint",
-    "prepack": "oclif manifest && oclif readme",
+    "prepack": "oclif manifest && oclif readme --no-aliases",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif readme && git add README.md",
     "e2e": "jest --collectCoverage=false --testRegex './e2e/e2e.js'"
