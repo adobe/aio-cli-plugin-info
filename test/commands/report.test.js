@@ -102,23 +102,25 @@ describe('instance methods', () => {
       })
     })
 
-    test('outputs error if cli package.json does not define a bugs.url', () => {
-      return new Promise((resolve, reject) => {
-        command.argv = []
-        command.config = { pjson: { bugs: { } } }
-        command.error = jest.fn(() => { throw new Error('Bang bang there goes your heart') })
-        return command.run()
-          .then(() => {
-            reject(new Error('it should not reach here'))
-          }).catch(() => {
-            expect(envinfo.run).not.toHaveBeenCalled()
-            expect(stdout.output).toMatch('')
-            expect(command.error).toHaveBeenCalled()
-            expect(cli.open).not.toHaveBeenCalled()
-            resolve()
-          })
+    test('outputs error if cli package.json does not define a bugs.url', async () => {
+      command.argv = []
+      command.config = { pjson: { bugs: { } } }
+      command.error = jest.fn(() => { throw new Error('Bang bang there goes your heart') })
+      const unexpectedError = new Error('it should not reach here')
+
+      let e
+      try {
+        await command.run()
+        throw unexpectedError
+      } catch (err) {
+        e = err
       }
-      )
+
+      expect(e).not.toEqual(unexpectedError)
+      expect(envinfo.run).not.toHaveBeenCalled()
+      expect(stdout.output).toMatch('')
+      expect(command.error).toHaveBeenCalled()
+      expect(cli.open).not.toHaveBeenCalled()
     })
   })
 })
