@@ -101,7 +101,7 @@ class InfoCommand extends Command {
           link: linkPlugins.map(mapPlugin)
         }
         if (flags.yml) {
-          this.log(yaml.safeDump(resObj))
+          this.log(yaml.dump(resObj))
         } else {
           this.log(JSON.stringify(resObj, null, 2))
         }
