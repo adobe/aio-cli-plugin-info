@@ -316,7 +316,7 @@ describe('instance methods', () => {
       `
 
       envinfo.run.mockResolvedValue('{}')
-      yaml.safeDump.mockImplementation((json) => actualYaml.safeDump(json))
+      yaml.dump.mockImplementation((json) => actualYaml.dump(json))
       envinfo.helpers = { getNodeInfo: () => ['', '12.5.0'] }
       return command.run()
         .then(() => {
@@ -349,7 +349,7 @@ describe('instance methods', () => {
       command.config = { pjson: { name: 'ima-cli', oclif: { plugins: [] } }, plugins: [{ name: 'name', version: 'version', type: 'type' }] }
       command.warn = jest.fn()
       envinfo.run.mockResolvedValue('{}')
-      yaml.safeDump.mockReturnValue('yaml')
+      yaml.dump.mockReturnValue('yaml')
       envinfo.helpers = { getNodeInfo: () => ['', '14.5.0'] }
       return command.run()
         .then(() => {
@@ -363,7 +363,7 @@ describe('instance methods', () => {
             console: false
           }))
           expect(stdout.output).toMatch('')
-          expect(yaml.safeDump).toHaveBeenCalled()
+          expect(yaml.dump).toHaveBeenCalled()
           expect(command.warn).not.toHaveBeenCalled()
         })
     })
