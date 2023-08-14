@@ -14,6 +14,7 @@ const { Command, Flags } = require('@oclif/core')
 const envinfo = require('envinfo')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
+const semver = require('semver')
 const { getProxyForUrl } = require('proxy-from-env')
 
 class InfoCommand extends Command {
@@ -119,8 +120,8 @@ class InfoCommand extends Command {
       }
 
       const nodeInfo = await envinfo.helpers.getNodeInfo()
-      if (!['14', '16', '18'].includes(nodeInfo[1].split('.')[0])) {
-        this.warn('Node version not supported. Supported versions are 14, 16, and 18')
+      if (!semver.satisfies(nodeInfo[1], this.config.pjson.engines.node)) {
+        this.warn(`Node version ${nodeInfo[1]} not supported. Supported versions are ${this.config.pjson.engines.node}`)
       }
     } catch (e) {
       this.error(e)
