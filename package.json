@@ -1,7 +1,7 @@
 {
   "name": "@adobe/aio-cli-plugin-info",
   "description": "Adobe I/O CLI plugin to display dev environment version information",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "repository": "adobe/aio-cli-plugin-info",
   "homepage": "https://github.com/adobe/aio-cli-plugin-info",
   "bugs": "https://github.com/adobe/aio-cli-plugin-info/issues",
