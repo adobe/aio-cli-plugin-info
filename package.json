@@ -19,7 +19,7 @@
     "@adobe/eslint-config-aio-lib-config": "^4.0.0",
     "acorn": "^8.7.0",
     "dedent": "^1.5.1",
-    "eslint": "^8.57.1",
+    "eslint": "^9.19.0",
     "eslint-config-oclif": "^5.2.2",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
