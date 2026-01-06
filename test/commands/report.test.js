@@ -14,17 +14,8 @@ const Command = require('../../src/commands/report')
 const { stdout } = require('stdout-stderr')
 const envinfo = require('envinfo')
 jest.mock('envinfo')
-jest.mock('@oclif/core', () => {
-  return {
-    ...jest.requireActual('@oclif/core'),
-    CliUx: {
-      ux: {
-        open: jest.fn()
-      }
-    }
-  }
-})
-const { CliUx: { ux: cli } } = require('@oclif/core')
+jest.mock('open', () => jest.fn())
+const open = require('open')
 
 test('exports', async () => {
   expect(typeof Command).toEqual('function')
@@ -48,7 +39,7 @@ describe('instance methods', () => {
   beforeEach(() => {
     command = new Command([])
     envinfo.run.mockResolvedValue('ok')
-    cli.open.mockResolvedValue('mkay')
+    open.mockResolvedValue('mkay')
   })
 
   describe('run', () => {
@@ -70,7 +61,7 @@ describe('instance methods', () => {
             console: false
           }))
           expect(stdout.output).toMatch('')
-          expect(cli.open).toHaveBeenCalled()
+          expect(open).toHaveBeenCalled()
         })
     })
 
@@ -88,7 +79,7 @@ describe('instance methods', () => {
             console: false
           }))
           expect(stdout.output).toMatch('')
-          expect(cli.open).toHaveBeenCalled()
+          expect(open).toHaveBeenCalled()
         })
     })
 
@@ -97,7 +88,7 @@ describe('instance methods', () => {
       command.config = { pjson: { bugs: { url: 'some-link' } } }
       return command.run().then(() => {
         expect(envinfo.run).not.toHaveBeenCalled()
-        expect(cli.open).toHaveBeenCalled()
+        expect(open).toHaveBeenCalled()
         expect(stdout.output).toMatch('')
       })
     })
@@ -120,7 +111,7 @@ describe('instance methods', () => {
       expect(envinfo.run).not.toHaveBeenCalled()
       expect(stdout.output).toMatch('')
       expect(command.error).toHaveBeenCalled()
-      expect(cli.open).not.toHaveBeenCalled()
+      expect(open).not.toHaveBeenCalled()
     })
   })
 })

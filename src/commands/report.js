@@ -10,8 +10,9 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Command, Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Command, Flags } = require('@oclif/core')
 const envinfo = require('envinfo')
+const open = require('open')
 
 // ///////////////
 const issueTemplate = `### Expected Behaviour\n
@@ -59,7 +60,7 @@ class ReportCommand extends Command {
       const issueBody = issueTemplate.replace('%replaced%', resInfo)
       url = `${baseReportUrl}?body=${encodeURIComponent(issueBody)}&title=new+bug+report&labels=bug`
     }
-    cli.open(url)
+    open(url)
   }
 }
 
