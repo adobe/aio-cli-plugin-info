@@ -49,7 +49,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run for bugs (object)', () => {
       command.argv = []
-      command.config = { pjson: { bugs: { url: 'some-link' } } }
+      command.config = { runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }), pjson: { bugs: { url: 'some-link' } } }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -67,7 +67,7 @@ describe('instance methods', () => {
 
     test('calls envinfo.run for bugs (string)', () => {
       command.argv = []
-      command.config = { pjson: { bugs: 'some-link' } }
+      command.config = { runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }), pjson: { bugs: 'some-link' } }
       return command.run()
         .then(() => {
           expect(envinfo.run).toHaveBeenCalledWith(expect.objectContaining({
@@ -85,7 +85,7 @@ describe('instance methods', () => {
 
     test('does not call envinfo.run for feature', () => {
       command.argv = ['-f']
-      command.config = { pjson: { bugs: { url: 'some-link' } } }
+      command.config = { runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }), pjson: { bugs: { url: 'some-link' } } }
       return command.run().then(() => {
         expect(envinfo.run).not.toHaveBeenCalled()
         expect(open).toHaveBeenCalled()
@@ -95,7 +95,7 @@ describe('instance methods', () => {
 
     test('outputs error if cli package.json does not define a bugs.url', async () => {
       command.argv = []
-      command.config = { pjson: { bugs: { } } }
+      command.config = { runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }), pjson: { bugs: { } } }
       command.error = jest.fn(() => { throw new Error('Bang bang there goes your heart') })
       const unexpectedError = new Error('it should not reach here')
 

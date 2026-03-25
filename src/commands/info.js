@@ -43,9 +43,8 @@ class InfoCommand extends Command {
   }
 
   async run () {
-    const { flags } = await this.parse(InfoCommand)
-
     try {
+      const { flags } = await this.parse(InfoCommand)
       const resInfo = await envinfo.run({
         System: ['OS', 'CPU', 'Memory', 'Shell'],
         Binaries: ['Node', 'Yarn', 'npm'],
@@ -57,7 +56,7 @@ class InfoCommand extends Command {
         showNotFound: true
       })
 
-      const plugins = this.config.plugins
+      const plugins = [...this.config.plugins.values()]
         .filter(p => !p.parent)
         .sort((a, b) => a.name < b.name ? -1 : 1)
 

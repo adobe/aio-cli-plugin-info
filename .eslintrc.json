@@ -4,5 +4,10 @@
         "jsdoc": {
           "ignorePrivate": true
         }
-    }    
+    },
+    "rules": {
+        "node/no-missing-require": ["error", {
+            "allowModules": ["@oclif/core"]
+        }]
+    }
 }
