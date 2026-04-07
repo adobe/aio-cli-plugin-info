@@ -20,7 +20,7 @@
     "@adobe/eslint-config-aio-lib-config": "^5.0.0",
     "acorn": "^8.7.0",
     "dedent": "^1.5.1",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-plugin-jest": "^29",
     "eslint-plugin-jsdoc": "^48",
     "execa": "^9.5.2",
