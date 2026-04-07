@@ -93,6 +93,7 @@ describe('instance methods', () => {
     test('calls envinfo.run', () => {
       command.argv = []
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -126,6 +127,7 @@ describe('instance methods', () => {
     test('proxies, cli plugins (core, user, link) stdout', () => {
       command.argv = []
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -178,6 +180,7 @@ describe('instance methods', () => {
 
       command.argv = []
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -222,6 +225,7 @@ describe('instance methods', () => {
     test('proxies, cli plugins (core, user, link) --json', () => {
       command.argv = ['-j']
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -297,6 +301,7 @@ describe('instance methods', () => {
     test('proxies, cli plugins (core, user, link) --yml', async () => {
       command.argv = ['-y']
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -352,6 +357,7 @@ describe('instance methods', () => {
     test('calls envinfo.run --json', () => {
       command.argv = ['-j']
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -385,6 +391,7 @@ describe('instance methods', () => {
     test('calls envinfo.run --yml', () => {
       command.argv = ['-y']
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -428,6 +435,7 @@ describe('instance methods', () => {
 
     test('warns if node is not supported', async () => {
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
@@ -451,6 +459,7 @@ describe('instance methods', () => {
 
     test('plugins list is sorted', async () => {
       command.config = {
+        runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
         pjson: {
           name: 'ima-cli',
           oclif: {
